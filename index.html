@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Title and Meta Description -->
+    <title>TripSheet | Zero-Backend Travel Itineraries</title>
+    <meta name="description" content="TripSheet distills your chaotic flight and hotel bookings into a single, chronological timeline. No logins, zero backend, entirely in your browser." />
+    
+    <!-- Canonical -->
+    <link rel="canonical" href="https://tripsheet.app/" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://tripsheet.app/" />
+    <meta property="og:title" content="TripSheet | Zero-Backend Travel Itineraries" />
+    <meta property="og:description" content="Turn scattered bookings into a clean timeline instantly. 100% private, client-side only." />
+    <meta property="og:image" content="https://tripsheet.app/bg-rotated.jpg" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content="TripSheet" />
+    <meta property="twitter:description" content="Zero-backend travel itineraries powered by IndexedDB." />
+    <meta property="twitter:image" content="https://tripsheet.app/bg-rotated.jpg" />
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Structured Data (JSON-LD) -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      "name": "TripSheet",
+      "operatingSystem": "Web",
+      "applicationCategory": "TravelApplication",
+      "description": "A client-side zero-backend itinerary builder.",
+      "url": "https://tripsheet.app",
+      "offers": {
+        "@type": "Offer",
+        "price": "0.00",
+        "priceCurrency": "USD"
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

@@ -1,0 +1,17 @@
+# TripSheet
+
+TripSheet is a zero-backend, client-side web utility for converting chaotic travel booking text into a clean chronological timeline. 
+
+## Technical Details
+- Built with React, Vite, Tailwind v4
+- Local storage via IndexedDB (Dexie.js)
+- State management via Zustand
+- Routing via Wouter
+- Styling via Tailwind CSS and GSAP
+- Export engine via html-to-image
+- Stateless sharing via lz-string URL hashes
+
+## Architecture Philosophy
+- Zero Backend: No user accounts, no databases, no server-side APIs. Runs entirely in the browser to ensure $0 operational cost and maximum privacy.
+- Instant Value: Renders timelines immediately.
+- Mobile-First: Interfaces are designed for phones first, scaling up to cinematic desktop layouts.
