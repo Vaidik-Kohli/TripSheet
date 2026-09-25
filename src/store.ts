@@ -26,7 +26,13 @@ export const useTripStore = create<TripStore>((set, get) => ({
     set({ isLoading: true });
     try {
       const trips = await db.trips.orderBy('createdAt').reverse().toArray();
-      set({ trips, isLoading: false });
+      const populatedTrips = await Promise.all(
+        trips.map(async (trip) => {
+          const events = await db.events.where('tripId').equals(trip.id).sortBy('startTime');
+          return { ...trip, events };
+        })
+      );
+      set({ trips: populatedTrips, isLoading: false });
     } catch (error) {
       console.error('Failed to load trips', error);
       set({ isLoading: false });
@@ -78,6 +84,7 @@ export const useTripStore = create<TripStore>((set, get) => ({
       ...eventDetails,
     };
     await db.events.add(newEvent);
+    await get().loadTrips(); // Refresh the trips array so counts update
     if (get().activeTrip?.id === tripId) {
       await get().setActiveTrip(tripId);
     }
@@ -87,6 +94,7 @@ export const useTripStore = create<TripStore>((set, get) => ({
     const event = await db.events.get(eventId);
     if (event) {
       await db.events.delete(eventId);
+      await get().loadTrips(); // Refresh the trips array so counts update
       if (get().activeTrip?.id === event.tripId) {
         await get().setActiveTrip(event.tripId);
       }

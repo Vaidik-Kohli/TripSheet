@@ -148,18 +148,21 @@ export function LandingPage() {
       const inner = cell.querySelector('.bento-inner') as HTMLElement;
       if (!inner) return;
 
-      const rotateXTo = gsap.quickTo(inner, "rotateX", { duration: 0.3, ease: "power2.out" });
-      const rotateYTo = gsap.quickTo(inner, "rotateY", { duration: 0.3, ease: "power2.out" });
+      // Ensure 3D context
+      gsap.set(inner, { transformPerspective: 1000, transformStyle: "preserve-3d" });
+
+      const rotateXTo = gsap.quickTo(inner, "rotateX", { duration: 0.4, ease: "power2.out" });
+      const rotateYTo = gsap.quickTo(inner, "rotateY", { duration: 0.4, ease: "power2.out" });
 
       cell.addEventListener('mousemove', (e) => {
         const rect = cell.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
-        const rotateX = gsap.utils.mapRange(0, rect.height, 3, -3, y);
-        const rotateY = gsap.utils.mapRange(0, rect.width, -3, 3, x);
+        // Slightly stronger but subtle tilt (6 degrees max)
+        const rotateX = gsap.utils.mapRange(0, rect.height, 6, -6, y);
+        const rotateY = gsap.utils.mapRange(0, rect.width, -6, 6, x);
 
-        gsap.set(inner, { transformPerspective: 1000 });
         rotateXTo(rotateX);
         rotateYTo(rotateY);
       }, { passive: true });
@@ -187,7 +190,7 @@ export function LandingPage() {
       {/* Custom Cursor */}
       <div className="custom-cursor fixed top-0 left-0 w-4 h-4 bg-white rounded-full pointer-events-none z-[9999]" />
 
-      {/* GLOBAL Film Grain Overlay (Optimized: Removed mix-blend-overlay, lowered opacity) */}
+      {/* GLOBAL Film Grain Overlay */}
       <div className="fixed inset-0 pointer-events-none z-[9998] bg-[url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')] opacity-[0.03]" />
 
       {/* Fluid Island Nav */}
@@ -287,7 +290,9 @@ export function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-3 grid-flow-dense gap-6" style={{ perspective: '2000px' }}>
               <div className="bento-cell md:col-span-2 p-1 border border-white/10 rounded-[2.5rem] bg-white/5 relative group">
                 <div className="bento-inner w-full h-full bg-black/60 backdrop-blur-md rounded-[calc(2.5rem-4px)] p-12 md:p-20 flex flex-col justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] origin-center will-change-transform">
-                  <Map className="w-12 h-12 text-white mb-16" />
+                  <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-16 text-white backdrop-blur-md">
+                    <Map className="w-8 h-8" />
+                  </div>
                   <div>
                     <h3 className="text-4xl font-bold mb-4 font-display">Smart Paste</h3>
                     <p className="text-zinc-400 text-lg max-w-md font-light leading-relaxed">Paste raw text from any booking confirmation. Our regex engine instantly extracts dates, times, and booking codes.</p>
@@ -297,7 +302,9 @@ export function LandingPage() {
 
               <div className="bento-cell p-1 border border-white/10 rounded-[2.5rem] bg-white/5 relative group">
                 <div className="bento-inner w-full h-full bg-black/60 backdrop-blur-md rounded-[calc(2.5rem-4px)] p-12 flex flex-col justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] origin-center will-change-transform">
-                  <Lock className="w-12 h-12 text-white mb-16" />
+                  <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-16 text-white backdrop-blur-md">
+                    <Lock className="w-8 h-8" />
+                  </div>
                   <div>
                     <h3 className="text-3xl font-bold mb-4 font-display">Privacy First</h3>
                     <p className="text-zinc-400 font-light leading-relaxed">Everything lives in IndexedDB on your device. We never see your data.</p>
@@ -307,7 +314,9 @@ export function LandingPage() {
 
               <div className="bento-cell p-1 border border-white/10 rounded-[2.5rem] bg-white/5 relative group">
                 <div className="bento-inner w-full h-full bg-black/60 backdrop-blur-md rounded-[calc(2.5rem-4px)] p-12 flex flex-col justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] origin-center will-change-transform">
-                  <Zap className="w-12 h-12 text-white mb-16" />
+                  <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-16 text-white backdrop-blur-md">
+                    <Zap className="w-8 h-8" />
+                  </div>
                   <div>
                     <h3 className="text-3xl font-bold mb-4 font-display">Stateless Share</h3>
                     <p className="text-zinc-400 font-light leading-relaxed">Export trips via a compressed URL hash. Share instantly without databases.</p>
@@ -319,7 +328,9 @@ export function LandingPage() {
                 <div className="bento-inner w-full h-full bg-black/60 backdrop-blur-md rounded-[calc(2.5rem-4px)] p-12 md:p-20 flex flex-col justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.02)] relative overflow-hidden origin-center will-change-transform">
                   <div className="absolute right-0 top-0 bottom-0 w-1/2 bg-[url('https://images.unsplash.com/photo-1550684376-efcbd6e3f031?q=80&w=2070&auto=format&fit=crop')] bg-cover bg-center grayscale mix-blend-overlay opacity-20 pointer-events-none" />
                   <div className="relative z-10">
-                    <PlaneTakeoff className="w-12 h-12 text-white mb-16" />
+                    <div className="w-16 h-16 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-16 text-white backdrop-blur-md">
+                      <PlaneTakeoff className="w-8 h-8" />
+                    </div>
                     <h3 className="text-4xl font-bold mb-4 font-display">Chronological Sorting</h3>
                     <p className="text-zinc-400 text-lg max-w-md font-light leading-relaxed">Stop scrolling through your inbox at the airport. Get a clean, day-by-day visual timeline.</p>
                   </div>
@@ -342,8 +353,10 @@ export function LandingPage() {
                 <div className="absolute inset-0 bg-blue-900/10 mix-blend-screen pointer-events-none" />
                 <div className="relative z-10 w-full h-full rounded-[calc(2.5rem-4px)] p-12 md:p-24 flex flex-col justify-end pointer-events-none">
                   <div>
-                    <PlaneTakeoff className="w-12 h-12 md:w-16 md:h-16 text-white mb-6 md:mb-8" />
-                    <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4 md:mb-6 font-display">Chronological Clarity.</h2>
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 md:mb-10 text-white backdrop-blur-md shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+                      <PlaneTakeoff className="w-8 h-8 md:w-10 md:h-10" />
+                    </div>
+                    <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4 md:mb-6 font-display drop-shadow-lg">Chronological Clarity.</h2>
                     <p className="text-xl md:text-2xl text-zinc-400 max-w-xl font-light leading-relaxed">Flights, hotels, and activities sorted automatically by time. Perfect order, instantly.</p>
                   </div>
                 </div>
@@ -355,8 +368,10 @@ export function LandingPage() {
                 <div className="absolute inset-0 bg-emerald-900/10 mix-blend-screen pointer-events-none" />
                 <div className="relative z-10 w-full h-full rounded-[calc(2.5rem-4px)] p-12 md:p-24 flex flex-col justify-end pointer-events-none">
                   <div>
-                    <Shield className="w-12 h-12 md:w-16 md:h-16 text-white mb-6 md:mb-8" />
-                    <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4 md:mb-6 font-display">Absolute Privacy.</h2>
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 md:mb-10 text-white backdrop-blur-md shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+                      <Shield className="w-8 h-8 md:w-10 md:h-10" />
+                    </div>
+                    <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4 md:mb-6 font-display drop-shadow-lg">Absolute Privacy.</h2>
                     <p className="text-xl md:text-2xl text-zinc-400 max-w-xl font-light leading-relaxed">No servers. No accounts. Your data lives strictly in your browser's local storage.</p>
                   </div>
                 </div>
@@ -368,8 +383,10 @@ export function LandingPage() {
                 <div className="absolute inset-0 bg-purple-900/10 mix-blend-screen pointer-events-none" />
                 <div className="relative z-10 w-full h-full rounded-[calc(2.5rem-4px)] p-12 md:p-24 flex flex-col justify-end pointer-events-none">
                   <div>
-                    <Sparkles className="w-12 h-12 md:w-16 md:h-16 text-white mb-6 md:mb-8" />
-                    <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4 md:mb-6 font-display">Instant Export.</h2>
+                    <div className="w-16 h-16 md:w-20 md:h-20 rounded-full bg-white/5 border border-white/10 flex items-center justify-center mb-6 md:mb-10 text-white backdrop-blur-md shadow-[0_0_30px_rgba(255,255,255,0.05)]">
+                      <Sparkles className="w-8 h-8 md:w-10 md:h-10" />
+                    </div>
+                    <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-4 md:mb-6 font-display drop-shadow-lg">Instant Export.</h2>
                     <p className="text-xl md:text-2xl text-zinc-400 max-w-xl font-light leading-relaxed">Share your itinerary instantly as a compressed URL or a high-res image directly to WhatsApp.</p>
                   </div>
                 </div>
