@@ -3,7 +3,7 @@ import { useTripStore } from '../store';
 import { TripCard } from './TripCard';
 import { CreateTripModal } from './CreateTripModal';
 import { Plus, ArrowLeft } from 'lucide-react';
-import { Link } from 'wouter';
+import { useLocation } from 'wouter';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 
@@ -11,26 +11,49 @@ export function Dashboard() {
   const { trips } = useTripStore();
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const container = useRef<HTMLDivElement>(null);
+  const [, setLocation] = useLocation();
 
   useGSAP(() => {
+    // 0. Intro mount animation from right
+    gsap.from(container.current, {
+      x: "100%",
+      opacity: 0,
+      duration: 0.8,
+      ease: "power3.out",
+      clearProps: "all"
+    });
+
+    // 1. Content stagger
     gsap.from(".dash-enter", {
       y: 40,
       opacity: 0,
       duration: 1,
       stagger: 0.1,
       ease: "power3.out",
+      delay: 0.3
     });
   }, { scope: container });
+
+  const goHome = (e: React.MouseEvent) => {
+    e.preventDefault();
+    gsap.to(container.current, {
+      x: "100%",
+      opacity: 0,
+      duration: 0.8,
+      ease: "power3.inOut",
+      onComplete: () => setLocation('/')
+    });
+  };
 
   return (
     <main ref={container} className="w-full max-w-full overflow-x-hidden min-h-screen bg-[#050505] text-zinc-50 px-6 md:px-12 font-sans">
       {/* Header / Hero */}
       <header className="pt-24 pb-24 md:pt-32 md:pb-32 flex flex-col md:flex-row md:items-end justify-between border-b border-white/10 relative">
         <div className="absolute top-8 left-0 dash-enter">
-          <Link href="/" className="inline-flex items-center gap-2 text-zinc-500 hover:text-white transition-colors group text-sm font-medium">
+          <a href="/" onClick={goHome} className="inline-flex items-center gap-2 text-zinc-500 hover:text-white transition-colors group text-sm font-medium">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Home
-          </Link>
+          </a>
         </div>
         <div className="max-w-3xl mt-12 md:mt-0">
           <h1 className="dash-enter text-5xl md:text-7xl lg:text-8xl font-semibold tracking-tighter leading-[1.05] font-display">

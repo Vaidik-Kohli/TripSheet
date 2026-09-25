@@ -1,5 +1,5 @@
 import { useRef } from 'react';
-import { Link } from 'wouter';
+import { useLocation } from 'wouter';
 import { ArrowRight, PlaneTakeoff, Shield, Sparkles, Map, CreditCard, Lock, Zap } from 'lucide-react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -11,8 +11,12 @@ gsap.registerPlugin(ScrollTrigger, ScrollToPlugin);
 export function LandingPage() {
   const container = useRef<HTMLDivElement>(null);
   const stackRef = useRef<HTMLDivElement>(null);
+  const [, setLocation] = useLocation();
 
   useGSAP(() => {
+    // Opacity fade to replace the buggy sliding transition
+    gsap.from(container.current, { opacity: 0, duration: 0.8, ease: "power3.out", clearProps: "all" });
+
     // 1. Custom Smooth Circular Cursor (Optimized with quickTo)
     const cursor = document.querySelector('.custom-cursor') as HTMLElement;
     if (cursor) {
@@ -88,7 +92,7 @@ export function LandingPage() {
       duration: 1,
       stagger: 0.1,
       ease: "power3.out",
-      delay: 0.1
+      delay: 0.3
     });
 
     // Marquee animation
@@ -184,6 +188,16 @@ export function LandingPage() {
     gsap.to(window, { duration: 1, scrollTo: 0, ease: "power3.inOut" });
   };
 
+  const goToDashboard = (e: React.MouseEvent) => {
+    e.preventDefault();
+    gsap.to(container.current, {
+      opacity: 0,
+      duration: 0.5,
+      ease: "power2.inOut",
+      onComplete: () => setLocation('/dashboard')
+    });
+  };
+
   return (
     <main ref={container} className="relative w-full max-w-full min-h-screen bg-[#050505] text-zinc-50 cursor-none font-sans overflow-x-hidden">
       
@@ -208,12 +222,12 @@ export function LandingPage() {
             <a href="#pricing" onClick={(e) => handleNavClick(e, '#pricing')} className="hover:text-white transition-colors">Pricing</a>
           </div>
         </div>
-        <Link href="/dashboard" className="group flex items-center gap-2 bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:scale-[0.98] active:scale-95 transition-transform duration-300">
+        <a href="/dashboard" onClick={goToDashboard} className="group flex items-center gap-2 bg-white text-black px-6 py-3 rounded-full text-sm font-medium hover:scale-[0.98] active:scale-95 transition-transform duration-300">
           Try for free
           <span className="bg-black/10 rounded-full p-1 group-hover:translate-x-1 transition-transform">
             <ArrowRight className="w-3 h-3" />
           </span>
-        </Link>
+        </a>
       </nav>
 
       {/* HERO SECTION */}
@@ -240,14 +254,14 @@ export function LandingPage() {
             </p>
 
             <div className="hero-text mt-14 relative z-20 hover-target">
-              <Link href="/dashboard" className="group relative inline-flex items-center justify-center bg-white text-black px-12 py-6 rounded-full text-lg font-medium tracking-wide hover:scale-[0.98] active:scale-[0.95] transition-transform duration-500 shadow-[0_0_50px_rgba(255,255,255,0.15)]">
+              <a href="/dashboard" onClick={goToDashboard} className="group relative inline-flex items-center justify-center bg-white text-black px-12 py-6 rounded-full text-lg font-medium tracking-wide hover:scale-[0.98] active:scale-[0.95] transition-transform duration-500 shadow-[0_0_50px_rgba(255,255,255,0.15)]">
                 <span className="flex items-center gap-4">
                   Start Building
                   <span className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center group-hover:translate-x-2 transition-transform duration-500">
                     <ArrowRight className="w-5 h-5" />
                   </span>
                 </span>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -411,14 +425,14 @@ export function LandingPage() {
                 <h2 className="text-6xl md:text-8xl font-bold tracking-tighter mb-6 font-display">$0. Forever.</h2>
                 <p className="text-2xl text-zinc-400 max-w-2xl mb-16 font-light leading-relaxed">TripSheet is a client-side utility. Since we have zero server costs, you have zero subscription fees.</p>
                 
-                <Link href="/dashboard" className="group/btn relative inline-flex items-center justify-center bg-white text-black px-12 py-6 rounded-full text-xl font-medium tracking-wide hover:scale-[0.98] active:scale-[0.95] transition-transform duration-500 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
+                <a href="/dashboard" onClick={goToDashboard} className="group/btn relative inline-flex items-center justify-center bg-white text-black px-12 py-6 rounded-full text-xl font-medium tracking-wide hover:scale-[0.98] active:scale-[0.95] transition-transform duration-500 shadow-[0_0_40px_rgba(255,255,255,0.2)]">
                   <span className="flex items-center gap-4">
                     Start using TripSheet
                     <span className="w-10 h-10 rounded-full bg-black/5 flex items-center justify-center group-hover/btn:translate-x-2 transition-transform duration-500">
                       <ArrowRight className="w-5 h-5" />
                     </span>
                   </span>
-                </Link>
+                </a>
               </div>
             </div>
           </section>
