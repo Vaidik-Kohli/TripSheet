@@ -28,6 +28,8 @@ export function EventBuilder({ tripId, onClose }: EventBuilderProps) {
   const [endTime, setEndTime] = useState('');
   const [locationOrigin, setLocationOrigin] = useState('');
   const [locationDest, setLocationDest] = useState('');
+  const [address, setAddress] = useState('');
+  const [assignedTo, setAssignedTo] = useState('');
   const [bookingRef, setBookingRef] = useState('');
   const [notes, setNotes] = useState('');
 
@@ -53,6 +55,8 @@ export function EventBuilder({ tripId, onClose }: EventBuilderProps) {
       endTime: endTime || undefined,
       locationOrigin: locationOrigin || undefined,
       locationDest: locationDest || undefined,
+      address: address || undefined,
+      assignedTo: assignedTo || undefined,
       bookingRef: bookingRef || undefined,
       notes: notes || undefined,
     });
@@ -158,6 +162,29 @@ export function EventBuilder({ tripId, onClose }: EventBuilderProps) {
                     value={locationDest}
                     onChange={e => setLocationDest(e.target.value)}
                     placeholder="Terminal 5, LHR"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-white/30 transition-colors"
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs uppercase text-zinc-500 font-semibold tracking-wider mb-2">Address (For Maps)</label>
+                  <input 
+                    type="text" 
+                    value={address}
+                    onChange={e => setAddress(e.target.value)}
+                    placeholder="123 Main St, London"
+                    className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-white/30 transition-colors"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs uppercase text-zinc-500 font-semibold tracking-wider mb-2">Assigned To</label>
+                  <input 
+                    type="text" 
+                    value={assignedTo}
+                    onChange={e => setAssignedTo(e.target.value)}
+                    placeholder="e.g. Sarah"
                     className="w-full bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white placeholder-zinc-600 focus:outline-none focus:border-white/30 transition-colors"
                   />
                 </div>

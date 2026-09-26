@@ -117,12 +117,25 @@ export function Timeline({ events, readOnly = false }: TimelineProps) {
                           </span>
                         </div>
                         
-                        {(event.locationOrigin || event.locationDest) && (
+                        {(event.locationOrigin || event.locationDest || event.address) && (
                           <div className="flex items-start gap-3 text-zinc-300">
                             <Navigation className="w-4 h-4 text-zinc-500 mt-1" />
                             <div className="flex flex-col">
                               {event.locationOrigin && <span>{event.locationOrigin}</span>}
                               {event.locationDest && <span className="text-zinc-500">to {event.locationDest}</span>}
+                              {event.address && <span className="text-sm mt-1">{event.address}</span>}
+                              
+                              {/* Maps Link */}
+                              {(event.address || event.locationOrigin) && (
+                                <a 
+                                  href={`https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(event.address || event.locationOrigin || '')}`} 
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-xs text-blue-400 hover:text-blue-300 mt-2 flex items-center gap-1 font-medium w-fit"
+                                >
+                                  <MapPin className="w-3 h-3" /> Open in Maps
+                                </a>
+                              )}
                             </div>
                           </div>
                         )}
@@ -135,6 +148,13 @@ export function Timeline({ events, readOnly = false }: TimelineProps) {
                             <div className="inline-block bg-white/10 border border-white/10 rounded-md px-2 py-1 font-mono text-sm tracking-widest text-white uppercase">
                               {event.bookingRef}
                             </div>
+                          </div>
+                        )}
+
+                        {event.assignedTo && (
+                          <div>
+                            <div className="text-[10px] uppercase tracking-widest text-zinc-600 mb-1">Assigned To</div>
+                            <p className="text-sm text-zinc-300 font-medium">{event.assignedTo}</p>
                           </div>
                         )}
                         

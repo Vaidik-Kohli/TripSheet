@@ -58,3 +58,48 @@ html {
     color: #09090b;
   }
 }
+
+/* Print Styles for Itinerary Export */
+@media print {
+  @page {
+    margin: 1.5cm;
+    size: A4 portrait;
+  }
+  
+  :root, body, main {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  
+  /* Hide UI elements */
+  nav, button, .custom-cursor, .print\:hidden {
+    display: none !important;
+  }
+  
+  /* Force dark cards to be light */
+  .bg-white\/5, .bg-black\/60 {
+    background: transparent !important;
+    border: 1px solid #e5e7eb !important;
+  }
+
+  /* Make text black */
+  .text-white, .text-zinc-50, .text-zinc-300, .text-zinc-400 {
+    color: black !important;
+  }
+  .text-zinc-500, .text-zinc-600 {
+    color: #4b5563 !important;
+  }
+
+  /* Page breaks */
+  .group {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  
+  h1, h2 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+}
